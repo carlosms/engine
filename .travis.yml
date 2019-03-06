@@ -29,6 +29,21 @@ jobs:
       script:
         - make packages
         - make test-coverage
+
+    - name: 'Integration Tests Linux'
+      script:
+        - make test-integration
+    - name: 'Integration Tests macOS'
+      if: NOT type = pull_request
+      script:
+        - make test-integration
+      os: osx
+      osx_image: xcode10.1
+    - name: 'Integration Tests Windows'
+      if: NOT type = pull_request
+      script:
+        - make test-integration
+      os: windows
     - name: 'Generated code'
       script:
         - GO111MODULE=on go mod tidy
