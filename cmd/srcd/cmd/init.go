@@ -44,8 +44,6 @@ var initCmd = &cobra.Command{
 			workdir, err = filepath.Abs(workdir)
 		}
 
-		workdir = filepath.ToSlash(workdir)
-
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -65,6 +63,8 @@ var initCmd = &cobra.Command{
 		if err := daemon.Start(workdir); err != nil {
 			logrus.Errorf("could not start daemon: %s", err)
 		}
+
+		logrus.Info("daemon started")
 	},
 }
 

@@ -49,7 +49,7 @@ Follow the steps below to get started with source{d} Engine.
 
 Follow these instructions:
 
-- [Docker for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac). Or, if you prefer to use [Homebrew](https://brew.sh/):
+- [Docker Desktop for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac). Or, if you prefer to use [Homebrew](https://brew.sh/):
   ```bash
   brew cask install docker
   ```
@@ -62,11 +62,11 @@ Follow these instructions:
   ```bash
   sudo pacman -S docker
   ```
-- [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows). Make sure to read the system requirements [here](https://docs.docker.com/docker-for-windows/install/).
+- [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows). Make sure to read the system requirements [here](https://docs.docker.com/docker-for-windows/install/). Please note Docker Toolbox is not supported.
 
 #### 2. Install source{d} Engine
 
-Download the **[latest release](https://github.com/src-d/engine/releases)** for MacOS (Darwin), Linux or Windows.
+Download the **[latest release](https://github.com/src-d/engine/releases)** for MacOS (Darwin), Linux or Windows. *The support for Windows is currently experimental.*
 
 **MacOS:**
 
@@ -92,10 +92,13 @@ sudo mv engine_linux_amd64/srcd /usr/local/bin/
 
 **Windows:**
 
-Prepare the `srcd` directory by runing the following commands in powershell:
+*The support for Windows is currently experimental.*
+
+*Please note that from now on we assume that the commands are executed in `powershell` and not in `cmd`. Running them in `cmd` is not guaranteed to work. Proper support may be added in future releases.*
+
+To run the following preparatory steps you need to run powershell as administrator.
 
 ```powershell
-# For this step you need to run powershell as administrator
 mkdir 'C:\Program Files\srcd'
 # Add the directory to the `%path%` to make it available from anywhere
 setx /M PATH "$($env:path);C:\Program Files\srcd"
@@ -130,7 +133,7 @@ srcd init C:\Users\some\path
 
 **Note for MaOS:** Docker for Mac [requires file sharing](https://docs.docker.com/docker-for-mac/troubleshoot/#volume-mounting-requires-file-sharing-for-any-project-directories-outside-of-users) for any path outside of `/Users`.
 
-**Note for Windows:** Docker for Windows [requires shared drives](https://docs.docker.com/docker-for-windows/#shared-drives).
+**Note for Windows:** Docker for Windows [requires shared drives](https://docs.docker.com/docker-for-windows/#shared-drives). Other than that, it's important to use a workdir that doesn't include any sub-directory whose access is not readable by the user running `srcd`. As an example using `C:\Users` as workdir will most probably not work. For more details see [this issue](https://github.com/src-d/engine/issues/250).
 
 #### 4. Explore the source{d} Engine
 
