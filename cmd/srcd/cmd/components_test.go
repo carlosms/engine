@@ -44,7 +44,7 @@ func (s *ComponentsTestSuite) TestListStopped() {
 	require := s.Require()
 
 	out, err := s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	require.NoError(err, out.String())
 
 	expected := regexp.MustCompile(
 		`^IMAGE                                INSTALLED    RUNNING    CONTAINER NAME
@@ -61,11 +61,11 @@ $`)
 func (s *ComponentsTestSuite) TestListInit() {
 	require := s.Require()
 
-	_, err := s.RunInit(context.TODO(), s.testDir)
-	require.NoError(err)
+	out, err := s.RunInit(context.TODO(), s.testDir)
+	require.NoError(err, out.String())
 
-	out, err := s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	out, err = s.RunCommand(context.TODO(), "components", "list")
+	require.NoError(err, out.String())
 
 	expected := regexp.MustCompile(`srcd/cli-daemon:\S+ +yes +yes +srcd-cli-daemon`)
 	s.Regexp(expected, out.String())
@@ -75,7 +75,7 @@ func (s *ComponentsTestSuite) TestInstall() {
 	require := s.Require()
 
 	out, err := s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	require.NoError(err, out.String())
 
 	// Get the exact image:version of gitbase
 	exp := regexp.MustCompile(`(srcd/gitbase:\S+) +(yes|no)`)
@@ -97,37 +97,37 @@ func (s *ComponentsTestSuite) TestInstall() {
 
 	// Check it's not installed
 	out, err = s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	require.NoError(err, out.String())
 
 	expected := regexp.MustCompile(`srcd/gitbase:\S+ +no +no +srcd-cli-gitbase`)
 	require.Regexp(expected, out.String())
 
 	// Install
-	_, err = s.RunCommand(context.TODO(), "components", "install", "srcd/gitbase")
-	require.NoError(err)
+	out, err = s.RunCommand(context.TODO(), "components", "install", "srcd/gitbase")
+	require.NoError(err, out.String())
 
 	// Check it's installed
 	out, err = s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	require.NoError(err, out.String())
 
 	expected = regexp.MustCompile(`srcd/gitbase:\S+ +yes +no +srcd-cli-gitbase`)
 	require.Regexp(expected, out.String())
 
 	// Call install again, should be an exit 0
-	_, err = s.RunCommand(context.TODO(), "components", "install", "srcd/gitbase")
-	require.NoError(err)
+	out, err = s.RunCommand(context.TODO(), "components", "install", "srcd/gitbase")
+	require.NoError(err, out.String())
 }
 
 func (s *ComponentsTestSuite) TestInstallAlias() {
 	require := s.Require()
 
 	// Install with image name
-	_, err := s.RunCommand(context.TODO(), "components", "install", "srcd/cli-daemon")
-	require.NoError(err)
+	out, err := s.RunCommand(context.TODO(), "components", "install", "srcd/cli-daemon")
+	require.NoError(err, out.String())
 
 	// Install with container name
-	_, err = s.RunCommand(context.TODO(), "components", "install", "srcd-cli-daemon")
-	require.NoError(err)
+	out, err = s.RunCommand(context.TODO(), "components", "install", "srcd-cli-daemon")
+	require.NoError(err, out.String())
 }
 
 func (s *ComponentsTestSuite) TestInstallUnknown() {
@@ -143,7 +143,7 @@ func (s *ComponentsTestSuite) TestInstallVersion() {
 	require := s.Require()
 
 	out, err := s.RunCommand(context.TODO(), "components", "list")
-	require.NoError(err)
+	require.NoError(err, out.String())
 
 	// Get the exact image:version of gitbase
 	exp := regexp.MustCompile(`(srcd/gitbase:\S+)`)
