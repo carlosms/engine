@@ -1,18 +1,8 @@
-branches:
-  only:
-    - master
-    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
-
 dist: xenial
 sudo: required
 
 language: go
 go_import_path: github.com/src-d/engine
-go:
-  - 1.12.x
-
-matrix:
-  fast_finish: true
 
 services:
   - docker
@@ -25,32 +15,19 @@ stages:
 jobs:
   include:
     - stage: tests
-      name: 'Unit Tests'
-      script:
-        - make packages
-        - make test-coverage
-
-    - name: 'Integration Tests Linux'
+      name: 'Integration Tests Linux 1.10'
+      go:
+        - 1.10.x
       script:
         - make test-integration
-    - name: 'Generated code'
+    - name: 'Integration Tests Linux 1.11'
+      go:
+        - 1.11.x
       script:
-        - GO111MODULE=on go mod tidy
-        - GO111MODULE=on go mod vendor
-        - make no-changes-in-commit
-        - make -C api proto
-        - make no-changes-in-commit
-    - stage: release
-      name: 'Release to GitHub and Docker Hub'
+        - make test-integration
+    - name: 'Integration Tests Linux 1.12'
+      go:
+        - 1.12.x
       script:
-        - make packages
-      deploy:
-        provider: releases
-        api_key: $GITHUB_TOKEN
-        file_glob: true
-        file: build/*.tar.gz
-        skip_cleanup: true
-        on:
-          all_branches: true
-      after_deploy:
-        - make docker-push-latest-release
+        - make test-integration
+

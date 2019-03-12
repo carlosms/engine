@@ -55,7 +55,19 @@ srcd/gitbase-web:\S+ +(yes|no) +no         srcd-cli-gitbase-web
 srcd/gitbase:\S+ +(yes|no) +no         srcd-cli-gitbase
 $`)
 
-	s.Regexp(expected, out.String())
+	outStr := out.String()
+
+	s.Regexp(expected, outStr)
+
+	expectedB := regexp.MustCompile(
+		`^IMAGE                                INSTALLED    RUNNING    CONTAINER NAME
+bblfsh/bblfshd:\S+ +(yes|no) +no         srcd-cli-bblfshd
+bblfsh/web:\S+ +(yes|no) +no         srcd-cli-bblfsh-web
+srcd/cli-daemon:\S+ +(yes|no) +no         srcd-cli-daemon
+srcd/gitbase-web:\S+ +(yes|no) +no         srcd-cli-gitbase-web
+srcd/gitbase:\S+ +(yes|no) +no         srcd-cli-gitbase$`)
+
+	s.Regexp(expectedB, outStr)
 }
 
 func (s *ComponentsTestSuite) TestListInit() {
